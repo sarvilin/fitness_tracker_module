@@ -1,4 +1,5 @@
 from dataclasses import dataclass, asdict
+from typing import List, Dict, Any
 
 
 @dataclass(frozen=True)
@@ -10,7 +11,7 @@ class InfoMessage:
     speed: float
     calories: float
 
-    message_template = (
+    TEMPLATE_RU = (
         'Тип тренировки: {training_type}; '
         'Длительность: {duration:.3f} ч.; '
         'Дистанция: {distance:.3f} км; '
@@ -20,7 +21,7 @@ class InfoMessage:
 
     def get_message(self) -> str:
         """Создание сообщения."""
-        return self.message_template.format(**asdict(self))
+        return self.TEMPLATE_RU.format(**asdict(self))
 
 
 class Training:
@@ -50,16 +51,20 @@ class Training:
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
-        pass
+        raise NotImplementedError(
+            f'Определите метод get_spent_calories() в'
+            f'{self.__class__.__name__}.'
+        )
 
     def show_training_info(self) -> InfoMessage:
         """Вернуть информационное сообщение о выполненной тренировке."""
-        text_info = InfoMessage(self.__class__.__name__,
-                                self.duration,
-                                self.get_distance(),
-                                self.get_mean_speed(),
-                                self.get_spent_calories()
-                                )
+        text_info = InfoMessage(
+            training_type=self.__class__.__name__,
+            duration=self.duration,
+            distance=self.get_distance(),
+            speed=self.get_mean_speed(),
+            calories=self.get_spent_calories()
+        )
         return text_info
 
 
@@ -139,15 +144,16 @@ class Swimming(Training):
         return spent_calories
 
 
-def read_package(workout_type: str, data: list) -> Training:
+def read_package(workout_type: str, data: List[int]) -> Training:
     """Прочитать данные полученные от датчиков."""
-    training_data = {'SWM': Swimming,
-                     'RUN': Running,
-                     'WLK': SportsWalking
-                     }
-    if workout_type in training_data:
-        workout_dict = training_data[workout_type](*data)
-    return workout_dict
+    training_type: Dict[str, Any] = {
+        'SWM': Swimming,
+        'RUN': Running,
+        'WLK': SportsWalking
+    }
+    if workout_type not in training_type:
+        raise ValueError('Ошибка данных!')
+    return training_type[workout_type](*data)
 
 
 def main(training: Training) -> None:
