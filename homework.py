@@ -10,7 +10,7 @@ class InfoMessage:
     speed: float
     calories: float
 
-    message_template = (
+    TEMPLATE_RU = (
         'Тип тренировки: {training_type}; '
         'Длительность: {duration:.3f} ч.; '
         'Дистанция: {distance:.3f} км; '
@@ -20,7 +20,7 @@ class InfoMessage:
 
     def get_message(self) -> str:
         """Создание сообщения."""
-        return self.message_template.format(**asdict(self))
+        return self.TEMPLATE_RU.format(**asdict(self))
 
 
 class Training:
