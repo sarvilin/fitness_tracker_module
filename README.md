@@ -11,6 +11,10 @@
 В коде указана аннотация типов.
 
 
+## Технологии
+[![Python](https://img.shields.io/badge/-Python-464646?style=flat-square&logo=Python)](https://www.python.org/)
+
+
 ### Как запустить проект:
 
 Клонировать репозиторий и перейти в него в командной строке:
@@ -46,3 +50,5 @@ python3 homework
 ```
 pytest
 ```
+### *Backend by:*
+[Сарвилин Алексей](https://github.com/sarvilin/fitness_tracker_module)
